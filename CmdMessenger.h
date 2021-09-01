@@ -39,11 +39,19 @@ extern "C"
 	// callback functions always follow the signature: void cmd(void);
 	typedef void(*messengerCallbackFunction) (void);
 }
-
+#ifndef MAXCALLBACKS
 #define MAXCALLBACKS        50   // The maximum number of commands   (default: 50)
+#endif
+#ifndef MESSENGERBUFFERSIZE
 #define MESSENGERBUFFERSIZE 64   // The length of the commandbuffer  (default: 64)
+#endif
+#ifndef MAXSTREAMBUFFERSIZE
 #define MAXSTREAMBUFFERSIZE 512  // The length of the streambuffer   (default: 64)
+#endif
+#ifndef DEFAULT_TIMEOUT
 #define DEFAULT_TIMEOUT     5000 // Time out on unanswered messages. (default: 5s)
+#endif
+
 
 // Message States
 enum
