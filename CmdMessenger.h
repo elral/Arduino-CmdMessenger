@@ -247,7 +247,7 @@ public:
 	 * Send a single argument as string w/o field_separator
 	 *  Note that this will only succeed if a sendCmdStart has been issued first
 	 */
-	template < class T > void sendSingleArg(T arg)
+	template < class T > void sendArg(T arg)
 	{
 		if (startCommand) {
 			comms->print(arg);
@@ -267,10 +267,27 @@ public:
 	}
 
 	/**
+	 * Send a single argument as string with custom accuracy w/o field_separator
+	 *  Note that this will only succeed if a sendCmdStart has been issued first
+	 */
+	template < class T > void sendArg(T arg, unsigned int n)
+	{
+		if (startCommand) {
+			comms->print(arg, n);
+		}
+	}
+
+	/**
 	 * Send double argument in scientific format.
 	 *  This will overcome the boundary of normal d sending which is limited to abs(f) <= MAXLONG
 	 */
 	void sendCmdSciArg(double arg, unsigned int n = 6);
+
+	/**
+	 * Send double argument in scientific format w/o field_separator
+	 *  This will overcome the boundary of normal d sending which is limited to abs(f) <= MAXLONG
+	 */
+	void sendSciArg(double arg, unsigned int n = 6);
 
 
 	/**
@@ -281,6 +298,17 @@ public:
 	{
 		if (startCommand) {
 			comms->print(field_separator);
+			writeBin(arg);
+		}
+	}
+
+	/**
+	 * Send a single argument in binary format w/o field_separator
+	 *  Note that this will only succeed if a sendCmdStart has been issued first
+	 */
+	template < class T > void sendBinArg(T arg)
+	{
+		if (startCommand) {
 			writeBin(arg);
 		}
 	}

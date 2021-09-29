@@ -328,6 +328,18 @@ void CmdMessenger::sendCmdSciArg(double arg, unsigned int n)
 }
 
 /**
+ * Send double argument in scientific format w/o field_separator
+ *  This will overcome the boundary of normal float sending which is limited to abs(f) <= MAXLONG
+ */
+void CmdMessenger::sendSciArg(double arg, unsigned int n)
+{
+	if (startCommand)
+	{
+		printSci(arg, n);
+	}
+}
+
+/**
  * Send end of command
  */
 bool CmdMessenger::sendCmdEnd(bool reqAc, byte ackCmdId, unsigned int timeout)
