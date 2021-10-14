@@ -501,7 +501,7 @@ char* CmdMessenger::readStringArg()
 		return current;
 	}
 	ArgOk = false;
-	return NULL;  //return '\0';
+	return '\0';
 }
 
 /**
