@@ -99,7 +99,7 @@ void CmdMessenger::reset()
  * if everything wents well, rcv_character_ok will be sent
  * otherwise rcv_character_false will be sent
  */
-void CmdMessenger:activateAcknowledge(const char rcv_acknowledgeID, const char rcv_character_ok, const char rcv_character_false)
+void CmdMessenger::activateAcknowledge(const char rcv_acknowledgeID, const char rcv_character_ok, const char rcv_character_false)
 {
 	receive_acknowledgeID = rcv_acknowledgeID;
 	receive_character_ok = rcv_character_ok;
@@ -178,10 +178,10 @@ uint8_t CmdMessenger::processLine(char serialChar)
 		reset();
 		if (receive_acknowledgeID)
 		{
-			cmdMessenger.sendCmdStart(receive_acknowledgeID);
-			cmdMessenger.sendCmdArg(receive_character_ok);
-			cmdMessenger.sendCmdArg(F("CommandMessenger -> OK!"));
-			cmdMessenger.sendCmdEnd();
+			sendCmdStart(receive_acknowledgeID);
+			sendCmdArg(receive_character_ok);
+			sendCmdArg(F("CommandMessenger -> OK!"));
+			sendCmdEnd();
 		}
 	}
 	else {
@@ -191,10 +191,10 @@ uint8_t CmdMessenger::processLine(char serialChar)
 			reset();
 			if (receive_acknowledgeID)
 			{
-				cmdMessenger.sendCmdStart(receive_acknowledgeID);
-				cmdMessenger.sendCmdArg(receive_character_false);
-				cmdMessenger.sendCmdArg(F("CommandMessenger -> Overflow!"));
-				cmdMessenger.sendCmdEnd();
+				sendCmdStart(receive_acknowledgeID);
+				sendCmdArg(receive_character_false);
+				sendCmdArg(F("CommandMessenger -> Overflow!"));
+				sendCmdEnd();
 			}
 		}
 	}
