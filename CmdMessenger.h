@@ -91,6 +91,9 @@ private:
 	char command_separator;           // Character indicating end of command (default: ';')
 	char field_separator;				// Character indicating end of argument (default: ',')
 	char escape_character;		    // Character indicating escaping of special chars
+	char receive_acknowledgeID;			// if != 0 a message with this CommandID will be sent
+	char receive_character_ok;			// this is the argumement from the acknowledger message if everything went OK
+	char receive_character_false;		// this is the argumement from the acknowledger message if message could not be detected
 
 	messengerCallbackFunction default_callback;            // default callback function  
 	messengerCallbackFunction callbackList[MAXCALLBACKS];  // list of attached callback functions 
@@ -179,7 +182,8 @@ public:
 	void printLfCr(bool addNewLine = true);
 	void attach(messengerCallbackFunction newFunction);
 	void attach(byte msgId, messengerCallbackFunction newFunction);
-
+	void activateAcknowledge(const char rcv_acknowledgeID, const char rcv_character_ok, const char rcv_character_false);
+	
 	// **** Command processing ****
 
 	void feedinSerialData();

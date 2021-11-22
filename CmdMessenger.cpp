@@ -73,6 +73,7 @@ void CmdMessenger::init(Stream &ccomms, const char fld_separator, const char cmd
 	escape_character = esc_character;
 	bufferLength = MESSENGERBUFFERSIZE;
 	bufferLastIndex = MESSENGERBUFFERSIZE - 1;
+	receive_acknowledgeID = 0;
 	reset();
 
 	default_callback = NULL;
@@ -91,6 +92,18 @@ void CmdMessenger::reset()
 	current = NULL;
 	last = NULL;
 	dumped = true;
+}
+
+/**
+ * Activates Acknowledge on after each command with commandID rcv_acknowledge,
+ * if everything wents well, rcv_character_ok will be sent
+ * otherwise rcv_character_false will be sent
+ */
+void CmdMessenger:activateAcknowledge(const char rcv_acknowledgeID, const char rcv_character_ok, const char rcv_character_false)
+{
+	receive_acknowledgeID = rcv_acknowledgeID;
+	receive_character_ok = rcv_character_ok;
+	receive_character_false = rcv_character_false;
 }
 
 /**
@@ -163,11 +176,27 @@ uint8_t CmdMessenger::processLine(char serialChar)
 			CmdlastChar = '\0';
 		}
 		reset();
+		if (receive_acknowledgeID)
+		{
+			cmdMessenger.sendCmdStart(receive_acknowledgeID);
+			cmdMessenger.sendCmdArg(receive_character_ok);
+			cmdMessenger.sendCmdArg(F("CommandMessenger -> OK!"));
+			cmdMessenger.sendCmdEnd();
+		}
 	}
 	else {
 		commandBuffer[bufferIndex] = serialChar;
 		bufferIndex++;
-		if (bufferIndex >= bufferLastIndex) reset();
+		if (bufferIndex >= bufferLastIndex) {
+			reset();
+			if (receive_acknowledgeID)
+			{
+				cmdMessenger.sendCmdStart(receive_acknowledgeID);
+				cmdMessenger.sendCmdArg(receive_character_false);
+				cmdMessenger.sendCmdArg(F("CommandMessenger -> Overflow!"));
+				cmdMessenger.sendCmdEnd();
+			}
+		}
 	}
 	return messageState;
 }
